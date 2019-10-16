@@ -16,7 +16,7 @@ var map = new mapboxgl.Map({
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": "#1d1f20"
+        "background-color": "whitesmoke"
       }
     }]
   },
