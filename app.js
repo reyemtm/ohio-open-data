@@ -128,19 +128,19 @@ map.on('style.load', function() {
 
 map.on("click", mapQuery)
 
-function mapQuery() {
-  var features = getFeatures(this);
-  console.log(features)
+function mapQuery(e) {
+  var point = e;
+  var features = getFeatures(point);
   if (features.length) {
     var popup = new mapboxgl.Popup()
-    .setLngLat(this.point.lngLat)
+    .setLngLat(e.lngLat)
     .setHTML(`<h1>${features[0].properties.NAME}</h1>`)
     .addTo(map);
   }
 }
 
-function getFeatures() {
-  var features = map.queryRenderedFeatures(this.point)
+function getFeatures(e) {
+  var features = map.queryRenderedFeatures(e.point)
   return features
 }
 
