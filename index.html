@@ -30,9 +30,8 @@
   body {
     height: 100vh;
   }
-  row {
-    width: 100%;
-    max-width: 100vw;
+  .row {
+    margin: 0;
   }
   #map {
     position: relative;
@@ -55,7 +54,12 @@
       <a href="/contribute/">contribute</a>
   </div>
 </nav>
-    <header id="hero">HERO
+    <header id="hero">
+      <section class="row">
+        <div class="col is-center">
+          Hero
+        </div>
+      </section>
     </header>
     <section id="map"></section>
     <section id="table">TABLE</section>
