@@ -1,5 +1,15 @@
 //https://kryogenix.org/code/browser/sorttable/
 //https://spreadsheets.google.com/feeds/list/1B5aor-SB82VB38_OZ5rioygC_R0ExuIWWSvZyBAj_j4/od6/public/values?alt=json
+
+var joinKeys = [];
+
+// fetch("https://spreadsheets.google.com/feeds/list/1B5aor-SB82VB38_OZ5rioygC_R0ExuIWWSvZyBAj_j4/od6/public/values?alt=json")
+// .then(res=>{
+//   return res.json()
+// })
+// .then(data=> {
+//   console.log(data.feed.entry)
+// })
 var map = new mapboxgl.Map({
   container: 'map',
   hash: true,
@@ -99,6 +109,21 @@ map.on('style.load', function() {
     }
   });
 
+  
+  Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vTei5xbMLVaBD0PgMjv1CGryrtIIuPEDaAq9lu_jhG7VB38f-1zsWOzASqdyL3fuwGyDexaPd6950qB/pub?output=csv", {
+    download: true,
+    header: true,
+    complete: function(results) {
+      console.log(results.data);
+      renderTable("table", results.data);
+      results.data.map(function(key) {
+        joinKeys[key.KEY] = key
+      });
+      console.log(joinKeys)
+      // map.setPaintProperty("counties", "circle-color", ["case", ["get", "GEOID"], ])
+    }
+  });
+  
   fetch("https://reyemtm.github.io/ohio-open-data/ohio.geojson")
   .then(res => {
     return res.json()
@@ -115,14 +140,13 @@ map.on('style.load', function() {
     map.getSource("places").setData(json);
   });
   
-  fetch("https://reyemtm.github.io/ohio-open-data/table.json")
-  .then(res => {
-    return res.json()
-  })
-  .then(json => {
-    console.log(json);
-    renderTable("table", json)
-  });
+  // fetch("https://reyemtm.github.io/ohio-open-data/table.json")
+  // .then(res => {
+  //   return res.json()
+  // })
+  // .then(json => {
+  //   renderTable("table", json)
+  // });
 
 });
 
@@ -131,10 +155,17 @@ map.on("click", mapQuery)
 function mapQuery(e) {
   var point = e;
   var features = getFeatures(point);
+  console.log(features)
   if (features.length) {
+    var props = joinKeys[features[0].properties.GEOID];
+    console.log(props)
+    var url = "#";
+    if ((features[0].properties.NAME).includes("County")) {
+      url = "https://duckduckgo.com/?q=" + features[0].properties.NAME + "ohio+auditor"
+    }
     var popup = new mapboxgl.Popup()
     .setLngLat(e.lngLat)
-    .setHTML(`<h1>${features[0].properties.NAME}</h1>`)
+    .setHTML(`<h3>${features[0].properties.NAME}</h3><a href='${url}' target='_blank'>Auditor</a>`)
     .addTo(map);
   }
 }
@@ -148,14 +179,8 @@ function renderTable(id, object) {
   var div = document.getElementById(id);
   var table = document.createElement("table");
   table.classList.add("sortable")
-  var headings = ["NAME", "GISLINK"];
+  var headings = ["NAME", "GISLINK", "AUDITORLINK"];
 
-  // object.map(feature => {
-  //   for (var p in feature) {
-  //     if (headings.indexOf(p) < 0) headings.push(p)
-  //   }
-  // });
-  // console.log(headings);
   var string = "<thead>";
   for (var h in headings) {
     string += "<th>" + headings[h] + "</th>"
@@ -165,7 +190,8 @@ function renderTable(id, object) {
     string += "<tr>"
     for (var p in feature) {
       if (headings.indexOf(p) > -1) {
-        string += `<td>${feature[p]}</td>`
+        var item = (feature[p].includes("http")) ? `<a href='${feature[p]}'>${feature[p]}</>'` : feature[p]
+        string += `<td>${item}</td>`
       }
     }
     string += "</tr>"
