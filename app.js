@@ -55,7 +55,7 @@ map.on('style.load', function() {
       'visibility': 'visible'
     },
     'paint': {
-      'fill-color': 'transparent',
+      'fill-color': 'white',
       'fill-outline-color': '#121212'
     }
   });
@@ -95,7 +95,7 @@ map.on('style.load', function() {
     },
     'paint': {
       'line-color': "#121212",
-      'line-width': 3
+      'line-width': 1
     }
   });
 
@@ -112,8 +112,16 @@ map.on('style.load', function() {
     return res.json()
   })
   .then(json => {
-    map.getSource("palces").setData(json);
-    renderTable("table", json.features)
+    map.getSource("places").setData(json);
+  });
+  
+  fetch("https://reyemtm.github.io/ohio-open-data/table.json")
+  .then(res => {
+    return res.json()
+  })
+  .then(json => {
+    console.log(json);
+    renderTable("table", json)
   });
 
 });
@@ -128,15 +136,14 @@ function renderTable(id, object) {
   var div = document.getElementById(id);
   var table = document.createElement("table");
   table.classList.add("sortable")
-  var headings = [];
+  var headings = ["NAME", "GISLINK"];
 
-  object.map(feature => {
-    for (var p in feature.properties) {
-      if (headings.indexOf(p) < 0) headings.push(p)
-    }
-  });
-  console.log(headings);
-  logger.innerHTML += headings;
+  // object.map(feature => {
+  //   for (var p in feature) {
+  //     if (headings.indexOf(p) < 0) headings.push(p)
+  //   }
+  // });
+  // console.log(headings);
   var string = "<thead>";
   for (var h in headings) {
     string += "<th>" + headings[h] + "</th>"
@@ -144,8 +151,10 @@ function renderTable(id, object) {
   string += "</thead><tbody>";
   object.map(feature => {
     string += "<tr>"
-    for (var p in feature.properties) {
-      string += `<td>${feature.properties[p]}</td>`
+    for (var p in feature) {
+      if (headings.indexOf(p) > -1) {
+        string += `<td>${feature[p]}</td>`
+      }
     }
     string += "</tr>"
   })
