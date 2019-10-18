@@ -1,5 +1,5 @@
 //https://kryogenix.org/code/browser/sorttable/
-
+//https://spreadsheets.google.com/feeds/list/1B5aor-SB82VB38_OZ5rioygC_R0ExuIWWSvZyBAj_j4/od6/public/values?alt=json
 var map = new mapboxgl.Map({
   container: 'map',
   hash: true,
@@ -129,7 +129,19 @@ map.on('style.load', function() {
 map.on("click", mapQuery)
 
 function mapQuery() {
-  console.log(map.queryRenderedFeatures(this.point))
+  var features = getFeatures(this);
+  console.log(features)
+  if (features.length) {
+    var popup = new mapboxgl.Popup()
+    .setLngLat(this.point.lngLat)
+    .setHTML(`<h1>${features[0].properties.NAME}</h1>`)
+    .addTo(map);
+  }
+}
+
+function getFeatures() {
+  var features = map.queryRenderedFeatures(this.point)
+  return features
 }
 
 function renderTable(id, object) {
