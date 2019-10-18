@@ -1,3 +1,6 @@
+//https://kryogenix.org/code/browser/sorttable/
+var logger = document.getElementById("console")
+
 var map = new mapboxgl.Map({
   container: 'map',
   hash: true,
@@ -64,7 +67,7 @@ map.on('style.load', function() {
     }
   });
 
-  fetch("./ohio.geojson")
+  fetch("https://reyemtm.github.io/ohio-open-data/ohio.geojson")
   .then(res => {
     return res.json()
   })
@@ -84,22 +87,35 @@ function mapQuery() {
 function renderTable(id, object) {
   var div = document.getElementById(id);
   var table = document.createElement("table");
-  
+  table.classList.add("sortable")
   var headings = [];
 
   object.map(feature => {
     for (var p in feature.properties) {
-      if (p.indexOf(headings) < 0) headings.push(p)
+      if (headings.indexOf(p) < 0) headings.push(p)
     }
   });
-  console.log(headings)
-  table.innerHTML += '<tr>'
+  console.log(headings);
+  logger.innerHTML += headings;
+  var string = "<thead>";
   for (var h in headings) {
-    console.log(h)
-    table.innerHTML += `<th>${h}</th>`
+    string += "<th>" + headings[h] + "</th>"
   }
-  table.innerHTML += '</tr>'
-  div.appendChild(table)
+  string += "</thead><tbody>";
+  object.map(feature => {
+    string += "<tr>"
+    for (var p in feature.properties) {
+      string += `<td>${feature.properties[p]}</td>`
+    }
+    string += "</tr>"
+  })
+  string += "</tbody>"
+
+  table.innerHTML += string;
+  div.appendChild(table);
+  var newTable = document.querySelector(".sortable");
+  console.log(newTable)
+  sorttable.makeSortable(newTable);
 }
 
 function mapFilter(map, filter) {
