@@ -1,5 +1,4 @@
 //https://kryogenix.org/code/browser/sorttable/
-var logger = document.getElementById("console")
 
 var map = new mapboxgl.Map({
   container: 'map',
@@ -39,6 +38,14 @@ map.on('style.load', function() {
       features: []
     }
   });
+  
+  map.addSource('places', {
+    'type': 'geojson',
+    'data': {
+      type: "FeatureCollection",
+      features: []
+    }
+  });
 
   map.addLayer({
     'id': 'countiesFill',
@@ -49,8 +56,7 @@ map.on('style.load', function() {
     },
     'paint': {
       'fill-color': 'transparent',
-      'fill-outline-color': 'white',
-      'fill-opacity': 0.9
+      'fill-outline-color': '#121212'
     }
   });
   
@@ -66,6 +72,32 @@ map.on('style.load', function() {
       'line-width': 3
     }
   });
+  map.addLayer({
+    'id': 'placesFill',
+    'type': 'fill',
+    'source': 'places',
+    'layout': {
+      'visibility': 'visible'
+    },
+    'paint': {
+      'fill-color': 'whitesmoke',
+      'fill-outline-color': 'white',
+      'fill-opacity': 0.9
+    }
+  });
+  
+  map.addLayer({
+    'id': 'placesLine',
+    'type': 'line',
+    'source': 'places',
+    'layout': {
+      'visibility': 'visible'
+    },
+    'paint': {
+      'line-color': "#121212",
+      'line-width': 3
+    }
+  });
 
   fetch("https://reyemtm.github.io/ohio-open-data/ohio.geojson")
   .then(res => {
@@ -73,8 +105,16 @@ map.on('style.load', function() {
   })
   .then(json => {
     map.getSource("counties").setData(json);
-    renderTable("table", json.features)
+  });
+  
+  fetch("https://reyemtm.github.io/ohio-open-data/places.geojson")
+  .then(res => {
+    return res.json()
   })
+  .then(json => {
+    map.getSource("palces").setData(json);
+    renderTable("table", json.features)
+  });
 
 });
 
