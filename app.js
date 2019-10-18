@@ -20,11 +20,11 @@ var map = new mapboxgl.Map({
       }
     }]
   },
-  center: [-95.52, 39.94],
-  zoom: 4,
+  center: [-82.487, 40.232],
+  zoom: 6.88,
   debug: 1
 });
-map.addControl(new mapboxgl.NavigationControl());
+// map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.FullscreenControl());
 
 map.on('style.load', function() {
@@ -91,7 +91,8 @@ function renderTable(id, object) {
     for (var p in feature.properties) {
       if (p.indexOf(headings) < 0) headings.push(p)
     }
-  })
+  });
+  console.log(headings)
   table.innerHTML += '<tr>'
   for (var h in headings) {
     console.log(h)
