@@ -262,7 +262,14 @@ class selectControl {
   onAdd(map) {
     this._map = map;
     let _this = this;
-
+    this._layerOptions = [
+       ['case', 
+        ["!=", ["length", ['get', 'gis_parcel_map']], 0], '#FFEB3B', 
+        'lightgray'],
+       ['case', 
+        ["!=", ["length", ['get', 'gis_parcel_map']], 0], 'firebrick', 
+        'lightgray']
+    ];
     this._btn = document.createElement("button");
     this._btn.className = "";
     this._btn.type = "button";
@@ -272,10 +279,16 @@ class selectControl {
     // this._form.innerHTML = "<label for='select'>Map Theme</label>"
     this._select = document.createElement("select");
     this._select.id = "select";
-    this._select.innerHTML = "<option value='1'>One</option><option value='2'>Two</option>"
+    this._select.innerHTML = `
+      <option value='0'>Counties with Online Parcel Maps</option>
+      <option value='1'>Counties by Mapping API</option>
+      <option value='2'>Counties by Parcel Map Platform Vendor</option>
+      <option value='3'>Counties by Map Portal Platform Vendor</option>
+      `;
     this._select.onchange = function(e) {
       console.log(e.target.value);
-      console.log(map)
+      console.log(_this._layerOptions)
+      map.setPaintProperty("counties", "fill-color", _this._layerOptions[e.target.value]) 
     }
     this._form.appendChild(this._select);
     this._btn.appendChild(this._form)
