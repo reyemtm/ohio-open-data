@@ -279,13 +279,11 @@ class selectControl {
     // this._form.innerHTML = "<label for='select'>Map Theme</label>"
     this._select = document.createElement("select");
     this._select.id = "select";
-    this._select.innerHTML = `<option value='0'>Counties with Online Parcel Maps</option>
-      <option value='1'>Counties by Mapping API</option>
-      <option value='2'>Counties by Parcel Map Platform Vendor</option>
-      <option value='3'>Counties by Map Portal Platform Vendor</option>`;
+    this._select.innerHTML = "<option value='0'>Counties with Online Parcel Maps</option> \
+      <option value='1'>Counties by Mapping API</option> \
+      <option value='2'>Counties by Parcel Map Platform Vendor</option> \
+      <option value='3'>Counties by Map Portal Platform Vendor</option>";
     this._select.onchange = function(e) {
-      console.log(e.target.value);
-      console.log(_this._layerOptions)
       map.setPaintProperty("countiesFill", "fill-color", _this._layerOptions[e.target.value]) 
     }
     this._form.appendChild(this._select);
