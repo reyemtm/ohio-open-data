@@ -194,7 +194,7 @@ function renderTable(id, object) {
   var div = document.getElementById(id);
   var table = document.createElement("table");
   table.classList.add("table")
-  var headings = ["name", "gis_link", "auditor_map_link"];
+  var headings = ["name", "gis_parcel_map","gis_webpage"];
 
   var string = "<thead>";
   for (var h in headings) {
@@ -265,6 +265,12 @@ class selectControl {
     this._layerOptions = [
        ['case', 
         ["!=", ["length", ['get', 'gis_parcel_map']], 0], '#FFEB3B', 
+        'lightgray'],
+       ['case', 
+        ["!=", ["length", ['get', 'gis_parcel_map']], 0], 'firebrick', 
+       'lightgray'],
+       ['case', 
+        ["!=", ["length", ['get', 'gis_parcel_map']], 0], 'firebrick', 
         'lightgray'],
        ['case', 
         ["!=", ["length", ['get', 'gis_parcel_map']], 0], 'firebrick', 
