@@ -145,7 +145,7 @@ function initMap() {
       })
       .then(json => {
         var jsonJoined = joinData(json, joinKeys)
-        map.getSource("places").setData(jsonJoined)
+        // map.getSource("places").setData(jsonJoined)
       });
 
       map.addControl(new selectControl(), "top-left");
@@ -161,7 +161,7 @@ function initMap() {
   var popup = new mapboxgl.Popup();
 
   map.on("click", mapQuery);
-  map.on("mousemove", "placesFill", mapQuery)
+  // map.on("mousemove", "placesFill", mapQuery)
 
   function mapQuery(e) {
     popup.remove();
