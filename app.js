@@ -81,7 +81,7 @@ function initMap() {
       },
       'paint': {
         'fill-color': ['case', 
-          ["!=", ["length", ['get', 'auditor_map_link']], 0], '#B2EBF2', 
+          ["!=", ["length", ['get', 'gis_parcel_map']], 0], '#B2EBF2', 
           'whitesmoke'],
         'fill-outline-color': '#121212'
       }
