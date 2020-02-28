@@ -151,8 +151,8 @@ function initMap() {
       map.addControl(new selectControl(), "top-left");
 
       map.addControl(new MapboxGLButtonControl({
-        className: "mapbox-gl-draw_line",
-        title: "Draw Line",
+        className: "class",
+        title: "Toggle Table",
         eventHandler: toggleTable
       }));
 
@@ -344,9 +344,9 @@ function toggleTable(event) {
   // alert("Event handler when clicking on \r\n" + event.target.className);
   var table = document.getElementById("table");
   console.log(table.style.left)
-  if (!table.style.left || table.style.left === "-800px") {
+  if (!table.style.left || table.style.left != "0") {
     table.style.left = "0"
   }else{
-    table.style.left = "-800px"
+    table.style.left = "-" + table.scrollWidth + "px"
   }
 }
